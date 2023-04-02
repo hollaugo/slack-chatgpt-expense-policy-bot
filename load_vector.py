@@ -1,5 +1,5 @@
 #Library Modules Needed: llama_index, pathlib, pypdf2
-from llama_index import GPTSimpleVectorIndex, SimpleDirectoryReader
+from llama_index import GPTSimpleVectorIndex
 from pathlib import Path
 from llama_index import download_loader
 
