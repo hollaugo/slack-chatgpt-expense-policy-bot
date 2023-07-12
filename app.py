@@ -4,8 +4,18 @@ import os
 
 import config
 import openai
-from llama_index import load_index_from_storage
-from llama_index import response as r
+from llama_index import (
+    LLMPredictor,
+    ServiceContext,
+    SimpleDirectoryReader,
+    StorageContext,
+    VectorStoreIndex,
+    load_index_from_storage,
+)
+from llama_index.llms import OpenAI
+from llama_index.prompts import Prompt
+from llama_index.query_engine import CitationQueryEngine
+from llama_index.retrievers import VectorIndexRetriever
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -25,8 +35,14 @@ storage_context = StorageContext.from_defaults(
     persist_dir=r"C:\Users\DanielCantorBaez\Documents\SyncierGPT\slack-chatgpt-qa-bot\abs-prof-index"
 )
 
+
 # load index
 index = load_index_from_storage(storage_context)
+
+# Create a service context for the OpenAI model
+service_context = ServiceContext.from_defaults(
+    llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5)
+)
 
 
 # Listens to any incoming messages
@@ -37,7 +53,12 @@ def message_all(message, say):
 
     # Query the index with the message text and get a response
     text = message["text"]
-    query_engine = index.as_query_engine()
+    query_engine = CitationQueryEngine.from_args(
+        index,
+        similarity_top_k=3,
+        citation_chunk_size=512,
+    )
+
     response = query_engine.query(text)
 
     # Extract the desired message and sources from the response object
