@@ -36,12 +36,17 @@ storage_context = StorageContext.from_defaults(
 )
 
 
-# load index
-index = load_index_from_storage(storage_context)
-
 # Create a service context for the OpenAI model
 service_context = ServiceContext.from_defaults(
-    llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5)
+    llm=OpenAI(model="gpt-3.5-turbo", temperature=0)
+)
+
+# load index
+index = load_index_from_storage(
+    StorageContext.from_defaults(
+        persist_dir=r"C:\Users\DanielCantorBaez\Documents\SyncierGPT\slack-chatgpt-qa-bot\abs-prof-index"
+    ),
+    service_context=service_context,
 )
 
 
@@ -56,7 +61,7 @@ def message_all(message, say):
     query_engine = CitationQueryEngine.from_args(
         index,
         similarity_top_k=3,
-        citation_chunk_size=512,
+        citation_chunk_size=1024,
     )
 
     response = query_engine.query(text)
@@ -69,6 +74,8 @@ def message_all(message, say):
     print(message)
     # print(sources)
     say(message)
+
+    print(response.source_nodes[0].node.get_text())
 
 
 # Responds to mentions
