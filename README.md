@@ -22,21 +22,24 @@ A Slack bot that makes it possible for users to chat with documents.
 
   d. Generate an App-Level Token, enable the following scopes: connections:write, authorizations:read,app_configurations:write; retrieve the token.
 
-2. In the command line, run:
+2. Get your OpenAI API token and retrieve it.
+3. In the command line, run:
 
-  $ python -m venv venv
+  $$ cd <YOUR_PROJECT_PATH>
+
+  $$ python -m venv venv
 
   For Windows systems: 
 
-  $ ./venv/Scripts/activate
+  $$ ./venv/Scripts/activate
 
   For Unix-based systems:
 
-  $ source venv/bin/activate
+  $$ source venv/bin/activate
 
   Then install requirements:
 
-  $ pip install -r requirements.txt
+  $$ pip install -r requirements.txt
 
 4. Replace ABS_Prof_Full.pdf to the PDF of your preference (remember to update the path in both app.py and load_vector.py).
 5. Change the path/name of the index in index.storage_context.persist(persist_dir = <YOUR_INDEX_FILE_PATH>
@@ -44,7 +47,10 @@ A Slack bot that makes it possible for users to chat with documents.
   a. App_Level_Token_Slack
   b. OAuth_Slack_Key1
   c. OPENAI_API_KEY
-7. Run 
+7. Run $$ python load_vector.py
+8. Run $$ python app.py
+9. Wait some seconds while the app is initialized
+10. Start querying in Slack!
   
 
 
